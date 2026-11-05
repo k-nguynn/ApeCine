@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApeCine - Trải Nghiệm Điện Ảnh Đẳng Cấp</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body class="bg-[#0a0d14] text-white font-['Plus_Jakarta_Sans']">
+
+  <!-- HEADER NAVIGATION -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a0d14]/90 backdrop-blur-xl border-b border-white/10">
+    <div class="h-20 max-w-[1360px] mx-auto px-6 flex items-center justify-between gap-6">
+      
+      <!-- Logo ApeCine & Custom Location Selector -->
+      <div class="flex items-center gap-6">
+        <a href="Homepage.html" class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#e50914] text-3xl">local_activity</span>
+          <span class="font-extrabold text-2xl tracking-wider">APE<span class="text-[#e50914]">CINE</span></span>
+        </a>
+        
+        <!-- CUSTOM LOCATION DROPDOWN -->
+        <div class="relative hidden sm:block">
+          <button id="location-btn" onclick="toggleLocationMenu()" class="flex items-center gap-2 bg-[#151922] hover:bg-[#1f2430] px-3.5 py-2 rounded-xl border border-white/10 text-xs font-semibold transition-all">
+            <span class="material-symbols-outlined text-[#e50914] text-base">location_on</span>
+            <span id="current-location-text">Đà Nẵng</span>
+            <span class="material-symbols-outlined text-gray-400 text-sm transition-transform duration-200" id="location-arrow">expand_more</span>
+          </button>
+
+          <!-- MENU CHỌN KHU VỰC -->
+          <div id="location-dropdown-menu" class="absolute left-0 mt-2 w-48 bg-[#151922] border border-white/10 rounded-2xl shadow-2xl py-2 hidden z-50 backdrop-blur-xl">
+            <div class="px-3 py-1.5 text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Chọn thành phố</div>
+            
+            <button onclick="selectLocation('Đà Nẵng')" class="location-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors">
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-gray-400">apartment</span> Đà Nẵng
+              </span>
+              <span class="material-symbols-outlined text-sm text-[#e50914] check-icon">check</span>
+            </button>
+
+            <button onclick="selectLocation('Hà Nội')" class="location-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors">
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-gray-400">apartment</span> Hà Nội
+              </span>
+              <span class="material-symbols-outlined text-sm text-[#e50914] check-icon hidden">check</span>
+            </button>
+
+            <button onclick="selectLocation('TP. Hồ Chí Minh')" class="location-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors">
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-gray-400">apartment</span> TP. Hồ Chí Minh
+              </span>
+              <span class="material-symbols-outlined text-sm text-[#e50914] check-icon hidden">check</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Area: Search, Auth & Hamburger Button -->
+      <div class="flex items-center gap-3 md:gap-4">
+        <!-- Ô TÌM KIẾM CÓ CHỨC NĂNG LỌC REAL-TIME -->
+        <div class="relative hidden lg:block w-48">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">search</span>
+          <input id="search-input" onkeyup="filterMovies()" type="text" placeholder="Tìm phim..." class="w-full bg-[#151922] text-xs text-white pl-9 pr-4 py-2 rounded-xl border border-white/5 focus:outline-none focus:border-[#e50914]">
+        </div>
+
+        <!-- AUTH AREA -->
+        <div id="auth-container">
+          <div id="logged-out-view" class="flex items-center gap-2">
+            <button onclick="openAuthModal('login')" class="px-4 py-2 rounded-xl bg-[#d31419] hover:bg-[#b01014] text-white font-bold text-xs border border-white/10 transition-all hidden sm:inline-block">
+              Đăng Nhập / Đăng Ký
+            </button>
+          </div>
+
+          <div id="logged-in-view" class="relative hidden">
+            <button onclick="toggleUserMenu()" class="flex items-center gap-2 bg-[#151922] hover:bg-[#1f2430] px-3 py-1.5 rounded-xl border border-white/10 transition-all text-xs font-bold">
+              <span class="w-7 h-7 rounded-full bg-[#e50914] text-white flex items-center justify-center" id="user-avatar-initial">L</span>
+              <span id="user-name-display" class="hidden sm:inline-block">Thành Viên</span>
+              <span class="material-symbols-outlined text-gray-400 text-sm">expand_more</span>
+            </button>
+
+            <div id="user-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-[#151922] border border-white/10 rounded-2xl shadow-2xl py-2 hidden z-50">
+              <a href="Profile.html" class="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-300 hover:bg-[#1f2430] hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-base">person</span> Hồ Sơ 
+              </a>
+              <a href="Profile.html" class="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-300 hover:bg-[#1f2430] hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-base">confirmation_number</span> Lịch Sử Đặt Vé
+              </a>
+              <div class="h-px bg-white/10 my-1"></div>
+              <button onclick="simulateLogout()" class="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 transition-colors">
+                <span class="material-symbols-outlined text-base">logout</span> Đăng Xuất
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HAMBURGER MENU (Nút 3 gạch) -->
+        <button onclick="toggleSideMenu()" class="p-2.5 rounded-xl bg-[#151922] hover:bg-[#1f2430] border border-white/10 text-white transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-[#151922] rounded-3xl border border-white/10 shadow-2xl p-8 overflow-hidden">
+      <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+        <span class="material-symbols-outlined text-2xl">close</span>
+      </button>
+      <div class="text-center mb-6">
+        <div class="flex items-center justify-center gap-2 mb-2">
+          <span class="material-symbols-outlined text-[#e50914] text-3xl">local_activity</span>
+          <span class="font-extrabold text-2xl tracking-wider">APE<span class="text-[#e50914]">CINE</span></span>
+        </div>
+        <p id="modal-subtitle" class="text-xs text-gray-400">Chào mừng bạn đến với hệ thống đặt vé điện ảnh</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2 bg-[#1f2430] p-1.5 rounded-2xl mb-6">
+        <button id="tab-login" onclick="switchAuthTab('login')" class="py-2.5 rounded-xl text-xs font-bold transition-all bg-[#e50914] text-white">Đăng Nhập</button>
+        <button id="tab-register" onclick="switchAuthTab('register')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white">Tạo Tài Khoản</button>
+      </div>
+      <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div id="register-name-field" class="hidden space-y-1.5">
+          <label class="text-xs text-gray-300 font-semibold">Họ và tên</label>
+          <input type="text" id="reg-name" placeholder="Nhập họ và tên của bạn" class="w-full bg-[#10141c] text-xs text-white px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:border-[#e50914]">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-xs text-gray-300 font-semibold">Email hoặc Số điện thoại</label>
+          <input type="text" id="auth-email" required placeholder="name@example.com hoặc số điện thoại" class="w-full bg-[#10141c] text-xs text-white px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:border-[#e50914]">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-xs text-gray-300 font-semibold">Mật khẩu</label>
+          <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-[#10141c] text-xs text-white px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:border-[#e50914]">
+        </div>
+        <button type="submit" id="auth-submit-btn" class="w-full py-3.5 rounded-xl bg-[#e50914] hover:bg-[#b01014] text-white font-extrabold text-xs transition-all shadow-lg glow-primary mt-2">
+          Đăng Nhập
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SIDEBAR NAVIGATION OVERLAY -->
+  <div id="side-menu-overlay" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300" onclick="toggleSideMenu()"></div>
+  <div id="side-menu-drawer" class="fixed top-0 right-0 z-[55] w-80 h-full bg-[#121620] border-l border-white/10 shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+    <div>
+      <div class="flex items-center justify-between pb-6 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#e50914] text-2xl">local_activity</span>
+          <span class="font-extrabold text-xl tracking-wider">APE<span class="text-[#e50914]">CINE</span></span>
+        </div>
+        <button onclick="toggleSideMenu()" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white">
+          <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+      </div>
+      <nav class="flex flex-col gap-2 mt-6">
+        <a href="Homepage.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#e50914]/10 text-[#e50914] font-bold text-sm">
+          <span class="material-symbols-outlined">home</span> Trang Chủ
+        </a>
+        <a href="#movies-section" onclick="toggleSideMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#1f2430] text-gray-300 hover:text-white font-semibold text-sm transition-colors">
+          <span class="material-symbols-outlined">movie</span> Phim Đang Chiếu
+        </a>
+        <a href="Profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#1f2430] text-gray-300 hover:text-white font-semibold text-sm transition-colors">
+          <span class="material-symbols-outlined">account_circle</span> Tài Khoản Cá Nhân
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="pt-20">
+    <!-- HERO SLIDER SECTION -->
+    <section class="relative w-full h-[550px] lg:h-[650px] overflow-hidden bg-[#0a0d14]">
+      <div class="hero-slide active absolute inset-0">
+        <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://wallpaperaccess.com/full/12718841.jpg')">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/60 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#0a0d14] via-[#0a0d14]/80 to-transparent"></div>
+        </div>
+        <div class="absolute inset-0 max-w-[1360px] mx-auto px-6 flex items-center">
+          <div class="max-w-2xl flex flex-col gap-4">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-[#e50914] text-white font-extrabold text-[10px] uppercase">BOM TẤN</span>
+              <span class="px-2.5 py-1 rounded bg-[#ffb400]/20 border border-[#ffb400] text-[#ffb400] font-bold text-xs">IMAX 3D</span>
+            </div>
+            <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight leading-tight">Dune: Hành Tinh Cát 2</h1>
+            <p class="text-gray-300 text-sm lg:text-base line-clamp-3 leading-relaxed">
+              Hành trình huyền thoại của Paul Atreides khi anh hội ngộ cùng Chani và tộc người Fremen để trả thù những kẻ đã hủy hoại gia đình mình.
+            </p>
+            <div class="flex items-center gap-4 pt-2">
+              <a href="Booking.html?id=dune2" class="px-6 py-3.5 rounded-xl bg-[#e50914] text-white font-extrabold text-sm hover:bg-[#c10712] transition-all glow-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">confirmation_number</span> Đặt Vé Ngay
+              </a>
+              <a href="Moviedetail.html?id=dune2" class="px-6 py-3.5 rounded-xl bg-[#1f2430] hover:bg-[#2b303c] text-white font-bold text-sm border border-white/10 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">info</span> Chi Tiết Phim
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK BOOKING BAR (ĐỒNG BỘ CSDL & GIAO DIỆN LỊCH CHỌN THỜI GIAN) -->
+    <section id="quick-booking" class="w-full max-w-[1360px] mx-auto px-6 -mt-12 relative z-30">
+      <div class="bg-[#151922]/95 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 w-full lg:flex-1">
+          
+          <!-- BƯỚC 1: CHỌN PHIM -->
+          <div class="relative">
+            <div class="bg-[#1f2430] hover:bg-[#2b303c] p-3 rounded-xl border border-white/5 flex flex-col cursor-pointer transition-all" onclick="toggleQbDropdown('qb-movie-menu', 'qb-movie-arrow')">
+              <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">1. Chọn Phim</span>
+              <div class="flex items-center justify-between mt-1">
+                <span id="qb-movie-text" class="text-gray-400 font-semibold text-xs truncate">Chọn phim...</span>
+                <span id="qb-movie-arrow" class="material-symbols-outlined text-gray-400 text-sm transition-transform duration-200">expand_more</span>
+              </div>
+            </div>
+            
+            <div id="qb-movie-menu" class="qb-dropdown-menu absolute left-0 right-0 mt-2 bg-[#151922] border border-white/10 rounded-2xl shadow-2xl py-2 hidden z-50 backdrop-blur-xl max-h-60 overflow-y-auto">
+              <!-- Render tự động từ CSDL -->
+            </div>
+          </div>
+
+          <!-- BƯỚC 2: CHỌN CỤM RẠP -->
+          <div class="relative">
+            <div id="qb-step-cinema" class="bg-[#1f2430] p-3 rounded-xl border border-white/5 flex flex-col cursor-not-allowed opacity-40 transition-all" onclick="clickQbStep('cinema')">
+              <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">2. Chọn Cụm Rạp</span>
+              <div class="flex items-center justify-between mt-1">
+                <span id="qb-cinema-text" class="text-gray-400 font-semibold text-xs truncate">Vui lòng chọn phim</span>
+                <span id="qb-cinema-arrow" class="material-symbols-outlined text-gray-400 text-sm transition-transform duration-200">expand_more</span>
+              </div>
+            </div>
+            <div id="qb-cinema-menu" class="qb-dropdown-menu absolute left-0 right-0 mt-2 bg-[#151922] border border-white/10 rounded-2xl shadow-2xl py-2 hidden z-50 backdrop-blur-xl">
+              <button onclick="selectQbCinema('ApeCine Đà Nẵng')" class="qb-cinema-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors text-left">
+                <span>ApeCine Đà Nẵng</span>
+              </button>
+              <button onclick="selectQbCinema('ApeCine Hà Nội')" class="qb-cinema-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors text-left">
+                <span>ApeCine Hà Nội</span>
+              </button>
+              <button onclick="selectQbCinema('ApeCine TP.HCM')" class="qb-cinema-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors text-left">
+                <span>ApeCine TP.HCM</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- BƯỚC 3: CHỌN NGÀY (DẠNG BẢNG LỊCH THỜI GIAN) -->
+          <div class="relative">
+            <div id="qb-step-date" class="bg-[#1f2430] p-3 rounded-xl border border-white/5 flex flex-col cursor-not-allowed opacity-40 transition-all" onclick="clickQbStep('date')">
+              <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">3. Chọn Ngày Chiếu</span>
+              <div class="flex items-center justify-between mt-1">
+                <span id="qb-date-text" class="text-gray-400 font-semibold text-xs truncate">Vui lòng chọn rạp</span>
+                <span id="qb-date-arrow" class="material-symbols-outlined text-gray-400 text-sm transition-transform duration-200">expand_more</span>
+              </div>
+            </div>
+            <!-- Menu bảng lịch ngày -->
+            <div id="qb-date-menu" class="qb-dropdown-menu absolute left-0 right-0 mt-2 bg-[#151922] border border-white/10 rounded-2xl shadow-2xl p-3 hidden z-50 backdrop-blur-xl">
+              <div class="px-2 py-1 text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mb-2">Chọn ngày khả dụng</div>
+              <div id="qb-date-grid" class="grid grid-cols-2 gap-2">
+                <!-- Render từ CSDL -->
+              </div>
+            </div>
+          </div>
+
+          <!-- BƯỚC 4: SUẤT CHIẾU (DẠNG BẢNG GIỜ CHIẾU) -->
+          <div class="relative">
+            <div id="qb-step-time" class="bg-[#1f2430] p-3 rounded-xl border border-white/5 flex flex-col cursor-not-allowed opacity-40 transition-all" onclick="clickQbStep('time')">
+              <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">4. Suất Chiếu</span>
+              <div class="flex items-center justify-between mt-1">
+                <span id="qb-time-text" class="text-gray-400 font-semibold text-xs truncate">Vui lòng chọn ngày</span>
+                <span id="qb-time-arrow" class="material-symbols-outlined text-gray-400 text-sm transition-transform duration-200">expand_more</span>
+              </div>
+            </div>
+            <!-- Menu bảng suất chiếu -->
+            <div id="qb-time-menu" class="qb-dropdown-menu absolute left-0 right-0 mt-2 bg-[#151922] border border-white/10 rounded-2xl shadow-2xl p-3 hidden z-50 backdrop-blur-xl">
+              <div class="px-2 py-1 text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mb-2">Chọn suất chiếu & định dạng</div>
+              <div id="qb-time-grid" class="flex flex-col gap-1.5 max-h-48 overflow-y-auto">
+                <!-- Render từ CSDL -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- NÚT MUA VÉ NGAY -->
+        <a id="btn-submit-quick-booking" href="javascript:void(0);" onclick="submitQuickBooking()" class="w-full lg:w-auto px-8 py-4 rounded-xl bg-gray-700 text-gray-400 font-extrabold text-sm cursor-not-allowed opacity-50 transition-all shrink-0 text-center">
+          Mua Vé Ngay
+        </a>
+
+      </div>
+    </section>
+
+    <!-- MOVIE SELECTION SECTION -->
+    <section id="movies-section" class="w-full max-w-[1360px] mx-auto px-6 py-16">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 class="text-3xl font-extrabold">Phim Đang Khởi Chiếu</h2>
+        </div>
+      </div>
+
+      <!-- LƯỚI PHIM LOAD TỰ ĐỘNG DỮ LIỆU TỪ SQL SERVER DATABASE -->
+      <div id="movie-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <p class="text-gray-400 text-sm col-span-full">Đang tải danh sách phim từ cơ sở dữ liệu SQL Server...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#06080d] text-gray-400 pt-16 pb-12 border-t border-white/10 mt-16">
+    <div class="max-w-[1360px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      
+      <!-- Cột 1: Thông tin thương hiệu -->
+      <div class="space-y-4">
+        <a href="Homepage.html" class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#e50914] text-3xl">local_activity</span>
+          <span class="font-extrabold text-2xl tracking-wider text-white">APE<span class="text-[#e50914]">CINE</span></span>
+        </a>
+        <p class="text-xs leading-relaxed text-gray-400">
+          CÔNG TY CỔ PHẦN GIẢI TRÍ ĐIỆN ẢNH APECINE.<br>
+          Hệ thống rạp chiếu phim thương mại hàng đầu Việt Nam với công nghệ IMAX Laser, Dolby Atmos và dịch vụ chuẩn quốc tế.
+        </p>
+        <p class="text-xs text-gray-500">Giấy CNĐKDN: 0312345678 do Sở KH&ĐT TP. Đà Nẵng cấp lần đầu ngày 10/01/2024.</p>
+      </div>
+
+      <!-- Cột 2: Quy định & Điều khoản -->
+      <div class="space-y-3 text-xs">
+        <h4 class="font-extrabold text-white text-sm uppercase tracking-wider mb-2 border-l-2 border-[#e50914] pl-2">Điều Khoản Sử Dụng</h4>
+        <p><a href="#" class="hover:text-white transition-colors">Điều Khoản Chung</a></p>
+        <p><a href="#" class="hover:text-white transition-colors">Chính Sách Thanh Toán & Hoàn Vé</a></p>
+        <p><a href="#" class="hover:text-white transition-colors">Chính Sách Bảo Mật Thông Tin</a></p>
+        <p><a href="#" class="hover:text-white transition-colors">Quy Định Về Độ Tuổi Xem Phim</a></p>
+        <p><a href="#" class="hover:text-white transition-colors">Quyền Lợi Thành Viên ApeClub</a></p>
+      </div>
+
+      <!-- Cột 3: Hỗ trợ khách hàng -->
+      <div class="space-y-3 text-xs">
+        <h4 class="font-extrabold text-white text-sm uppercase tracking-wider mb-2 border-l-2 border-[#e50914] pl-2">Chăm Sóc Khách Hàng</h4>
+        <p class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-base text-gray-400">call</span>
+           Hotline: <strong class="text-[#ffb400] text-sm">1900XXXX</strong> 
+        </p>
+        <p class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-base text-gray-400">mail</span>
+          Email: <span class="text-white">cskh@apecine.vn</span>
+        </p>
+        <p class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-base text-gray-400">location_on</span>
+          Trụ sở chính: <span class="text-white"> Q. Hải Châu, TP. Đà Nẵng</span>
+        </p>
+      </div>
+
+      <!-- Cột 4: Thanh toán & Chứng nhận -->
+      <div class="space-y-4 text-xs">
+        <h4 class="font-extrabold text-white text-sm uppercase tracking-wider mb-2 border-l-2 border-[#e50914] pl-2">Đối Tác Thanh Toán</h4>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 rounded bg-[#151922] border border-white/10 text-gray-300 font-bold text-[11px]">MoMo</span>
+          <span class="px-2.5 py-1 rounded bg-[#151922] border border-white/10 text-gray-300 font-bold text-[11px]">VNPay</span>
+          <span class="px-2.5 py-1 rounded bg-[#151922] border border-white/10 text-gray-300 font-bold text-[11px]">ZaloPay</span>
+          <span class="px-2.5 py-1 rounded bg-[#151922] border border-white/10 text-gray-300 font-bold text-[11px]">Visa/Master</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bản quyền cuối trang -->
+    <div class="max-w-[1360px] mx-auto px-6 pt-6 border-t border-white/10 text-center text-xs text-gray-500">
+      © 2026 APECINE CINEMA CORPORATION. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ALL JAVASCRIPT LOGIC -->
+  <script>
+    let selectedQuickBooking = {
+      movieId: null,
+      movieTitle: null,
+      cinema: null,
+      date: null,
+      showtimeId: null,
+      timeText: null
+    };
+
+    let cachedShowtimes = [];
+    let currentAuthMode = 'login';
+
+    // --- CÁC HÀM QUẢN LÝ MODAL ĐĂNG NHẬP / ĐĂNG KÝ (GLOBAL) ---
+    function openAuthModal(mode = 'login') {
+      switchAuthTab(mode);
+      const modal = document.getElementById('auth-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function switchAuthTab(mode) {
+      currentAuthMode = mode;
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+      const nameField = document.getElementById('register-name-field');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const subtitle = document.getElementById('modal-subtitle');
+
+      if (mode === 'login') {
+        if (tabLogin) tabLogin.className = "py-2.5 rounded-xl text-xs font-bold transition-all bg-[#e50914] text-white";
+        if (tabRegister) tabRegister.className = "py-2.5 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white";
+        if (nameField) nameField.classList.add('hidden');
+        const regName = document.getElementById('reg-name');
+        if (regName) regName.required = false;
+        if (submitBtn) submitBtn.innerText = "Đăng Nhập";
+        if (subtitle) subtitle.innerText = "Chào mừng bạn quay lại hệ thống đặt vé ApeCine";
+      } else {
+        if (tabRegister) tabRegister.className = "py-2.5 rounded-xl text-xs font-bold transition-all bg-[#e50914] text-white";
+        if (tabLogin) tabLogin.className = "py-2.5 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white";
+        if (nameField) nameField.classList.remove('hidden');
+        const regName = document.getElementById('reg-name');
+        if (regName) regName.required = true;
+        if (submitBtn) submitBtn.innerText = "Đăng Ký Tài Khoản";
+        if (subtitle) subtitle.innerText = "Tạo tài khoản mới để nhận ưu đãi thành viên ApeClub";
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const emailOrPhone = document.getElementById('auth-email').value.trim();
+      const password = document.getElementById('auth-pass').value;
+
+      try {
+        if (currentAuthMode === 'register') {
+          const fullName = document.getElementById('reg-name').value.trim();
+          const response = await fetch('https://henchman-obscurity-blandness.ngrok-free.dev/api/register', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json', 
+              'ngrok-skip-browser-warning': 'true' 
+            },
+            body: JSON.stringify({ fullName, emailOrPhone, password })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert(`Đăng ký thành công tài khoản cho "${result.user.FullName}"! Hệ thống đã tự động đăng nhập.`);
+            localStorage.setItem('apecine_user', JSON.stringify(result.user));
+            updateLoggedInUI(result.user.FullName);
+            closeAuthModal();
+          } else {
+            alert(`Đăng ký thất bại: ${result.message}`);
+          }
+        } else {
+          const response = await fetch('https://henchman-obscurity-blandness.ngrok-free.dev/api/login', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json', 
+              'ngrok-skip-browser-warning': 'true' 
+            },
+            body: JSON.stringify({ emailOrPhone, password })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert(`Đăng nhập thành công! Chào mừng trở lại, ${result.user.FullName}`);
+            localStorage.setItem('apecine_user', JSON.stringify(result.user));
+            updateLoggedInUI(result.user.FullName);
+            closeAuthModal();
+          } else {
+            alert(`Đăng nhập thất bại: ${result.message}`);
+          }
+        }
+      } catch (err) {
+        console.error('Lỗi xác thực:', err);
+        alert('Không thể kết nối đến Server CSDL!');
+      }
+    }
+
+    function updateLoggedInUI(fullName) {
+      const nameDisp = document.getElementById('user-name-display');
+      const avatarInit = document.getElementById('user-avatar-initial');
+      const logoutView = document.getElementById('logged-out-view');
+      const loginView = document.getElementById('logged-in-view');
+
+      if (nameDisp) nameDisp.innerText = fullName;
+      if (avatarInit) avatarInit.innerText = fullName.charAt(0).toUpperCase();
+      if (logoutView) logoutView.classList.add('hidden');
+      if (loginView) loginView.classList.remove('hidden');
+    }
+
+    function toggleUserMenu() {
+      const menu = document.getElementById('user-dropdown-menu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    // 1. Tải danh sách phim từ Database (Đã tích hợp header ngrok-skip-browser-warning)
+    async function loadMoviesFromDB() {
+      const grid = document.getElementById('movie-grid');
+      const qbMovieMenu = document.getElementById('qb-movie-menu');
+
+      try {
+        const response = await fetch('https://henchman-obscurity-blandness.ngrok-free.dev/api/movies', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        const movies = await response.json();
+
+        if (!movies || movies.length === 0) {
+          grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full">Chưa có dữ liệu phim trong CSDL.</p>';
+          return;
+        }
+
+        grid.innerHTML = movies.map(movie => `
+          <div class="movie-card bg-[#151922] rounded-2xl overflow-hidden border border-white/5 flex flex-col group" data-title="${movie.Title}">
+            <a href="Moviedetail.html?id=${movie.MovieId}" class="relative aspect-[2/3] w-full overflow-hidden block">
+              <img src="${movie.PosterUrl}" alt="${movie.Title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <span class="absolute top-3 left-3 px-2 py-0.5 rounded ${getAgeRatingBadgeColor(movie.AgeRating)} text-white font-extrabold text-[10px]">${movie.AgeRating}</span>
+            </a>
+            <div class="p-4 flex flex-col justify-between flex-1 gap-4">
+              <div>
+                <div class="flex justify-between items-center text-xs text-gray-400 mb-1">
+                  <span class="truncate pr-2">${movie.Genre}</span>
+                  <span class="text-[#ffb400] font-bold shrink-0">★ ${movie.Rating}</span>
+                </div>
+                <a href="Moviedetail.html?id=${movie.MovieId}">
+                  <h3 class="font-extrabold text-base line-clamp-1 hover:text-[#e50914] transition-colors">${movie.Title}</h3>
+                </a>
+                <p class="text-xs text-gray-400 mt-1">${movie.Duration} phút • ${movie.Language}</p>
+              </div>
+              <a href="Booking.html?id=${movie.MovieId}" class="w-full py-2.5 rounded-xl bg-[#1f2430] hover:bg-[#e50914] text-white font-bold text-center text-xs transition-all">Đặt Vé</a>
+            </div>
+          </div>
+        `).join('');
+
+        if (qbMovieMenu) {
+          qbMovieMenu.innerHTML = movies.map(movie => `
+            <button onclick="selectQbMovie('${movie.MovieId}', '${movie.Title.replace(/'/g, "\\'")}')" class="qb-movie-item w-full flex items-center justify-between px-4 py-2.5 text-xs text-gray-200 hover:bg-[#1f2430] hover:text-[#ffb400] transition-colors text-left">
+              <span class="truncate font-semibold">${movie.Title}</span>
+            </button>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error('Lỗi khi tải dữ liệu từ CSDL:', err);
+        grid.innerHTML = '<p class="text-red-400 text-sm col-span-full">Lỗi kết nối tới Server CSDL.</p>';
+      }
+    }
+
+    function getAgeRatingBadgeColor(ageRating) {
+      if (ageRating === 'P') return 'bg-emerald-600';
+      if (ageRating === 'T13') return 'bg-[#ffb400] text-black';
+      if (ageRating === 'T18') return 'bg-purple-600';
+      return 'bg-[#e50914]';
+    }
+
+    // 2. Quick Booking Logic đồng bộ Database & Giao diện bảng lịch
+    function toggleQbDropdown(menuId, arrowId) {
+      const currentMenu = document.getElementById(menuId);
+      const currentArrow = document.getElementById(arrowId);
+      
+      document.querySelectorAll('.qb-dropdown-menu').forEach(menu => {
+        if (menu.id !== menuId) menu.classList.add('hidden');
+      });
+      document.querySelectorAll('[id^="qb-"][id$="-arrow"]').forEach(arrow => {
+        if (arrow.id !== arrowId) arrow.classList.remove('rotate-180');
+      });
+
+      currentMenu.classList.toggle('hidden');
+      currentArrow.classList.toggle('rotate-180');
+    }
+
+    function clickQbStep(step) {
+      if (step === 'cinema' && !selectedQuickBooking.movieId) {
+        alert('Vui lòng chọn PHIM ở Bước 1 trước!');
+      } else if (step === 'date' && !selectedQuickBooking.cinema) {
+        alert('Vui lòng chọn CỤM RẠP ở Bước 2 trước!');
+      } else if (step === 'time' && !selectedQuickBooking.date) {
+        alert('Vui lòng chọn NGÀY CHIẾU ở Bước 3 trước!');
+      } else {
+        toggleQbDropdown(`qb-${step}-menu`, `qb-${step}-arrow`);
+      }
+    }
+
+    async function selectQbMovie(id, title) {
+      selectedQuickBooking.movieId = id;
+      selectedQuickBooking.movieTitle = title;
+      document.getElementById('qb-movie-text').innerText = title;
+      document.getElementById('qb-movie-text').classList.replace('text-gray-400', 'text-white');
+
+      const stepCinema = document.getElementById('qb-step-cinema');
+      stepCinema.classList.remove('cursor-not-allowed', 'opacity-40');
+      stepCinema.classList.add('cursor-pointer', 'hover:bg-[#2b303c]');
+      document.getElementById('qb-cinema-text').innerText = 'Chọn cụm rạp...';
+
+      selectedQuickBooking.cinema = null;
+      selectedQuickBooking.date = null;
+      selectedQuickBooking.showtimeId = null;
+      lockQbStep('date', 'Vui lòng chọn rạp');
+      lockQbStep('time', 'Vui lòng chọn ngày');
+      updateSubmitButton();
+      toggleQbDropdown('qb-movie-menu', 'qb-movie-arrow');
+
+      try {
+        const res = await fetch(`https://henchman-obscurity-blandness.ngrok-free.dev/api/showtimes/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        cachedShowtimes = await res.json();
+      } catch (err) {
+        console.error('Lỗi tải suất chiếu:', err);
+        cachedShowtimes = [];
+      }
+    }
+
+    function selectQbCinema(cinemaName) {
+      if (!selectedQuickBooking.movieId) return;
+      selectedQuickBooking.cinema = cinemaName;
+      document.getElementById('qb-cinema-text').innerText = cinemaName;
+      document.getElementById('qb-cinema-text').classList.replace('text-gray-400', 'text-white');
+
+      const stepDate = document.getElementById('qb-step-date');
+      stepDate.classList.remove('cursor-not-allowed', 'opacity-40');
+      stepDate.classList.add('cursor-pointer', 'hover:bg-[#2b303c]');
+      document.getElementById('qb-date-text').innerText = 'Chọn ngày chiếu...';
+
+      selectedQuickBooking.date = null;
+      selectedQuickBooking.showtimeId = null;
+      lockQbStep('time', 'Vui lòng chọn ngày');
+      updateSubmitButton();
+
+      renderQuickBookingDates();
+      toggleQbDropdown('qb-cinema-menu', 'qb-cinema-arrow');
+    }
+
+    function renderQuickBookingDates() {
+      const dateGrid = document.getElementById('qb-date-grid');
+      dateGrid.innerHTML = '';
+
+      const validShowtimes = cachedShowtimes.filter(st => st.CinemaName === selectedQuickBooking.cinema);
+      const uniqueDates = [...new Set(validShowtimes.map(st => st.ShowDate.split('T')[0]))].sort();
+
+      if (uniqueDates.length === 0) {
+        dateGrid.innerHTML = `<span class="text-xs text-red-400 col-span-2">Không có lịch chiếu tại rạp này.</span>`;
+        return;
+      }
+
+      uniqueDates.forEach(dateStr => {
+        const parts = dateStr.split('-');
+        const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        
+        const btn = document.createElement('button');
+        btn.className = "flex flex-col items-center justify-center p-2.5 rounded-xl bg-[#10141c] hover:bg-[#e50914]/20 border border-white/10 hover:border-[#e50914] transition-all text-xs font-bold text-gray-200";
+        btn.innerHTML = `
+          <span class="text-[10px] text-gray-400 uppercase">Ngày</span>
+          <span class="text-sm font-extrabold text-white mt-0.5">${formattedDate}</span>
+        `;
+        btn.onclick = () => selectQbDate(dateStr, formattedDate);
+        dateGrid.appendChild(btn);
+      });
+    }
+
+    function selectQbDate(dateRaw, dateFormatted) {
+      selectedQuickBooking.date = dateRaw;
+      document.getElementById('qb-date-text').innerText = dateFormatted;
+      document.getElementById('qb-date-text').classList.replace('text-gray-400', 'text-white');
+
+      const stepTime = document.getElementById('qb-step-time');
+      stepTime.classList.remove('cursor-not-allowed', 'opacity-40');
+      stepTime.classList.add('cursor-pointer', 'hover:bg-[#2b303c]');
+      document.getElementById('qb-time-text').innerText = 'Chọn suất chiếu...';
+
+      selectedQuickBooking.showtimeId = null;
+      updateSubmitButton();
+
+      renderQuickBookingTimes(dateRaw);
+      toggleQbDropdown('qb-date-menu', 'qb-date-arrow');
+    }
+
+    function renderQuickBookingTimes(dateRaw) {
+      const timeGrid = document.getElementById('qb-time-grid');
+      timeGrid.innerHTML = '';
+
+      const validTimes = cachedShowtimes.filter(st => 
+        st.CinemaName === selectedQuickBooking.cinema && st.ShowDate.split('T')[0] === dateRaw
+      );
+
+      if (validTimes.length === 0) {
+        timeGrid.innerHTML = `<span class="text-xs text-red-400 p-2">Không có suất chiếu vào ngày này.</span>`;
+        return;
+      }
+
+      validTimes.forEach(st => {
+        const displayLabel = `${st.StartTime} - ${st.FormatType || 'Standard 2D'}`;
+        const btn = document.createElement('button');
+        btn.className = "w-full flex items-center justify-between p-2.5 rounded-xl bg-[#10141c] hover:bg-[#1f2430] hover:text-[#ffb400] border border-white/10 transition-all text-xs font-semibold text-gray-200 text-left";
+        btn.innerHTML = `
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-[#e50914]">schedule</span>
+            ${displayLabel}
+          </span>
+        `;
+        btn.onclick = () => selectQbTime(st.ShowtimeId, displayLabel);
+        timeGrid.appendChild(btn);
+      });
+    }
+
+    function selectQbTime(showtimeId, timeText) {
+      selectedQuickBooking.showtimeId = showtimeId;
+      selectedQuickBooking.timeText = timeText;
+      document.getElementById('qb-time-text').innerText = timeText;
+      document.getElementById('qb-time-text').classList.replace('text-gray-400', 'text-white');
+
+      updateSubmitButton();
+      toggleQbDropdown('qb-time-menu', 'qb-time-arrow');
+    }
+
+    function lockQbStep(step, placeholderText) {
+      const el = document.getElementById(`qb-step-${step}`);
+      el.classList.add('cursor-not-allowed', 'opacity-40');
+      el.classList.remove('cursor-pointer', 'hover:bg-[#2b303c]');
+      const textEl = document.getElementById(`qb-${step}-text`);
+      textEl.innerText = placeholderText;
+      textEl.classList.add('text-gray-400');
+      textEl.classList.remove('text-white');
+    }
+
+    function updateSubmitButton() {
+      const btn = document.getElementById('btn-submit-quick-booking');
+      if (selectedQuickBooking.movieId && selectedQuickBooking.cinema && selectedQuickBooking.date && selectedQuickBooking.showtimeId) {
+        btn.classList.remove('bg-gray-700', 'text-gray-400', 'cursor-not-allowed', 'opacity-50');
+        btn.classList.add('bg-[#e50914]', 'text-white', 'hover:bg-[#c10712]', 'glow-primary', 'cursor-pointer');
+      } else {
+        btn.classList.add('bg-gray-700', 'text-gray-400', 'cursor-not-allowed', 'opacity-50');
+        btn.classList.remove('bg-[#e50914]', 'text-white', 'hover:bg-[#c10712]', 'glow-primary', 'cursor-pointer');
+      }
+    }
+
+    function submitQuickBooking() {
+      if (!selectedQuickBooking.movieId || !selectedQuickBooking.showtimeId) {
+        alert('Vui lòng hoàn tất đủ 4 bước chọn lịch chiếu!');
+      } else {
+        window.location.href = `Booking.html?id=${selectedQuickBooking.movieId}&showtime=${selectedQuickBooking.showtimeId}`;
+      }
+    }
+
+    function toggleSideMenu() {
+      document.getElementById('side-menu-overlay').classList.toggle('hidden');
+      document.getElementById('side-menu-drawer').classList.toggle('translate-x-full');
+    }
+
+    function toggleLocationMenu() {
+      document.getElementById('location-dropdown-menu').classList.toggle('hidden');
+      document.getElementById('location-arrow').classList.toggle('rotate-180');
+    }
+
+    function selectLocation(name) {
+      localStorage.setItem('apecine_city', name);
+      const locText = document.getElementById('current-location-text');
+      if (locText) locText.innerText = name;
+
+      document.querySelectorAll('.location-item').forEach(item => {
+        const checkIcon = item.querySelector('.check-icon');
+        if (item.textContent.includes(name)) {
+          if (checkIcon) checkIcon.classList.remove('hidden');
+        } else {
+          if (checkIcon) checkIcon.classList.add('hidden');
+        }
+      });
+
+      toggleLocationMenu();
+    }
+
+    function checkLoginStatus() {
+      const storedUser = localStorage.getItem('apecine_user');
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          updateLoggedInUI(user.FullName);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    function simulateLogout() {
+      localStorage.removeItem('apecine_user');
+      location.reload();
+    }
+
+    function filterMovies() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      document.querySelectorAll('.movie-card').forEach(card => {
+        const title = card.getAttribute('data-title').toLowerCase();
+        card.style.display = title.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    window.addEventListener('click', function(e) {
+      const locBtn = document.getElementById('location-btn');
+      const locMenu = document.getElementById('location-dropdown-menu');
+      if (locBtn && !locBtn.contains(e.target) && locMenu && !locMenu.contains(e.target)) {
+        locMenu.classList.add('hidden');
+        document.getElementById('location-arrow').classList.remove('rotate-180');
+      }
+
+      const qb = document.getElementById('quick-booking');
+      if (qb && !qb.contains(e.target)) {
+        document.querySelectorAll('.qb-dropdown-menu').forEach(menu => menu.classList.add('hidden'));
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadMoviesFromDB();
+      checkLoginStatus();
+    });
+  </script>
+</body>
+</html>

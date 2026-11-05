@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApeCine - Đặt Vé & Chọn Ghế</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body class="bg-[#0a0d14] text-white font-['Plus_Jakarta_Sans']">
+
+  <!-- HEADER NAVBAR DÙNG CHUNG -->
+  <div id="common-header"></div>
+
+  <!-- MAIN BOOKING AREA -->
+  <main class="pt-28 pb-16 max-w-[1360px] mx-auto px-6">
+    
+    <!-- THANH TIẾN TRÌNH -->
+    <div class="bg-[#151922] p-4 rounded-2xl border border-white/10 shadow-xl mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#e50914] text-white flex items-center justify-center font-extrabold text-xs shadow-md">1</div>
+        <div>
+          <h4 class="text-xs font-bold text-white">Chọn Suất Chiếu</h4>
+          <p class="text-[10px] text-gray-400">Thời gian & rạp</p>
+        </div>
+      </div>
+      <div class="hidden md:block flex-1 h-px bg-white/10 mx-4"></div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#e50914] text-white flex items-center justify-center font-extrabold text-xs shadow-md">2</div>
+        <div>
+          <h4 class="text-xs font-bold text-white">Chọn Ghế Ngồi</h4>
+          <p class="text-[10px] text-gray-400">Thường, VIP & Couple</p>
+        </div>
+      </div>
+      <div class="hidden md:block flex-1 h-px bg-white/10 mx-4"></div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#1f2430] border border-white/20 text-gray-400 flex items-center justify-center font-extrabold text-xs">3</div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-400">Thanh Toán</h4>
+          <p class="text-[10px] text-gray-500">Hoàn tất vé</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- CỘT TRÁI & GIỮA: CHỌN SUẤT & GHẾ -->
+      <div class="lg:col-span-2 space-y-8">
+        
+        <!-- THỜI GIAN & SUẤT CHIẾU (LỌC THEO KHU VỰC) -->
+        <div class="bg-[#151922] p-6 rounded-2xl border border-white/10 shadow-xl space-y-4">
+          <h2 class="text-base font-extrabold mb-2 flex items-center gap-2">
+             1. Chọn Rạp & Suất Chiếu
+          </h2>
+          
+          <div>
+            <span class="text-xs text-gray-400 font-semibold block mb-2">Suất chiếu khả dụng tại khu vực đã chọn:</span>
+            <div id="showtimes-container" class="flex flex-wrap gap-3">
+              <span class="text-xs text-gray-400">Đang tải lịch chiếu từ cơ sở dữ liệu...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SƠ ĐỒ GHẾ NGỒI (CÓ ĐỒNG HỒ ĐẾM NGƯỢC Ở GÓC PHẢI TIÊU ĐỀ) -->
+        <div class="bg-[#151922] p-6 rounded-2xl border border-white/10 shadow-xl">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-base font-extrabold flex items-center gap-2">
+               2. Chọn Vị Trí Ghế Ngồi
+            </h2>
+            <!-- Đồng hồ giữ ghế -->
+            <div id="timer-box" class="flex items-center gap-2 bg-[#1f2430] px-3.5 py-1.5 rounded-xl border border-[#ffb400]/40 text-xs font-bold text-[#ffb400]">
+              <span class="material-symbols-outlined text-sm animate-pulse">timer</span>
+              <span>Thời gian giữ ghế:</span>
+              <span id="countdown" class="text-white text-xs font-extrabold">05:00</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-6 mb-8 text-xs font-semibold text-gray-300">
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-[#1e293b] border border-blue-400/30"></span>Thường (95k)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-amber-500/20 border border-amber-500"></span>VIP (115k)</div>
+            <div class="flex items-center gap-2"><span class="w-6 h-4 rounded bg-[#f397e1] border border-pink-400"></span> Couple (180k)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-[#e50914]"></span> Đang chọn</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-gray-700 opacity-40"></span> Đã bán</div>
+          </div>
+
+          <!-- Màn hình cong -->
+          <div class="w-full flex flex-col items-center mb-10">
+            <div class="w-4/5 h-3 bg-gradient-to-r from-transparent via-[#e50914] to-transparent rounded-[100%] shadow-[0_10px_20px_rgba(229,9,20,0.5)]"></div>
+            <span class="text-[10px] text-gray-400 font-extrabold uppercase tracking-widest mt-3">MÀN HÌNH CHIẾU</span>
+          </div>
+
+          <!-- Lưới ghế render động dựa trên CSDL -->
+          <div id="seat-grid" class="flex flex-col items-center gap-2.5 overflow-x-auto pb-4"></div>
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI: BẢNG TỔNG HỢP VÉ -->
+      <div class="bg-[#151922] p-6 rounded-2xl border border-white/10 shadow-xl flex flex-col justify-between h-fit sticky top-28">
+        <div>
+          <div class="flex gap-4 pb-6 border-b border-white/10">
+            <img id="poster-img" src="" alt="Poster" class="w-20 h-28 object-cover rounded-xl shadow-md">
+            <div class="flex flex-col justify-center">
+              <span id="movie-age" class="text-[10px] font-extrabold px-2 py-0.5 bg-[#e50914] text-white rounded w-fit">P</span>
+              <h3 id="selected-movie-title" class="font-extrabold text-base mt-1.5 leading-snug">Đang tải phim...</h3>
+              <p id="selected-cinema" class="text-xs text-gray-400 mt-1">ApeCine Đà Nẵng</p>
+            </div>
+          </div>
+
+          <div class="py-6 space-y-3.5 text-xs border-b border-white/10">
+            <div class="flex justify-between"><span class="text-gray-400">Suất chiếu:</span><strong id="summary-time">Chưa chọn</strong></div>
+            <div class="flex justify-between"><span class="text-gray-400">Ngày chiếu:</span><strong id="summary-date">03/11/2026</strong></div>
+            <div class="flex justify-between"><span class="text-gray-400">Phòng chiếu:</span><strong id="summary-room">Phòng tiêu chuẩn</strong></div>
+            <div class="flex justify-between items-start">
+              <span class="text-gray-400">Ghế đang chọn:</span>
+              <strong id="summary-seats" class="text-[#ffb400] text-right max-w-[150px] break-words">Chưa chọn</strong>
+            </div>
+          </div>
+
+          <div class="py-6 flex items-center justify-between">
+            <span class="font-extrabold text-sm">Tổng thanh toán:</span>
+            <span id="summary-total" class="font-extrabold text-2xl text-[#e50914]">0 đ</span>
+          </div>
+        </div>
+
+        <button onclick="checkout()" class="w-full py-4 rounded-xl bg-[#e50914] hover:bg-[#c10712] text-white font-extrabold text-sm transition-all shadow-lg glow-primary text-center">
+          Thanh Toán Ngay
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER DÙNG CHUNG -->
+  <div id="common-footer"></div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script src="assets/js/components.js"></script>
+  <script>
+    let currentBooking = { 
+      showtimeId: null, 
+      date: '', 
+      time: '', 
+      format: '', 
+      roomName: '',
+      cinemaName: '',
+      selectedSeats: [] 
+    };
+    
+    let bookedSeatsList = []; 
+    let allShowtimes = []; 
+    const TODAY_DATE_STR = '2026-11-04'; 
+
+    // Lọc suất chiếu khi người dùng đổi khu vực trên Navbar dùng chung
+    function renderShowtimesByLocation(cityName) {
+      const container = document.getElementById('showtimes-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const validShowtimes = allShowtimes.filter(st => {
+        const showDateFormatted = st.ShowDate ? st.ShowDate.split('T')[0] : '';
+        const matchDate = showDateFormatted >= TODAY_DATE_STR;
+        const matchCity = st.City ? st.City.includes(cityName) : true;
+        return matchDate && matchCity; 
+      });
+
+      if (validShowtimes.length > 0) {
+        validShowtimes.forEach((st, index) => {
+          const btn = document.createElement('button');
+          const isFirst = (index === 0);
+          
+          const dateParts = st.ShowDate.split('T')[0].split('-');
+          const displayDate = `${dateParts[2] || '04'}/${dateParts[1] || '11'}/${dateParts[0] || '2026'}`;
+
+          btn.className = `time-btn px-4 py-2.5 rounded-xl border text-xs font-bold transition-all text-center ${
+            isFirst ? 'bg-[#e50914]/20 border-[#e50914] text-white' : 'bg-[#1f2430] border-white/10 text-gray-300 hover:border-white'
+          }`;
+          
+          btn.innerHTML = `${st.StartTime} (${displayDate}) <span class="text-[10px] block text-gray-400">${st.FormatType}</span>`;
+          
+          btn.onclick = () => selectShowtime(st, displayDate, btn);
+          container.appendChild(btn);
+
+          if (isFirst) {
+            selectShowtime(st, displayDate, btn);
+          }
+        });
+      } else {
+        container.innerHTML = `<span class="text-xs text-red-400">Hiện tại khu vực ${cityName} không có suất chiếu nào từ ngày hôm nay trở đi.</span>`;
+        document.getElementById('summary-time').innerText = 'Chưa chọn';
+        document.getElementById('summary-seats').innerText = 'Chưa chọn';
+        document.getElementById('summary-total').innerText = '0 đ';
+        document.getElementById('seat-grid').innerHTML = '';
+      }
+    }
+
+    // Tải thông tin phim và lịch chiếu từ Database (Đã tích hợp ngrok-skip-browser-warning)
+    async function loadBookingDataFromDB() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const movieId = urlParams.get('id') || 'dune2';
+
+      try {
+        const resMovie = await fetch(`https://henchman-obscurity-blandness.ngrok-free.dev/api/movies/${movieId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        if (!resMovie.ok) throw new Error('Không tìm thấy phim');
+        const movie = await resMovie.json();
+
+        document.getElementById('selected-movie-title').innerText = movie.Title;
+        document.getElementById('movie-age').innerText = movie.AgeRating;
+        document.getElementById('movie-age').className = `text-[10px] font-extrabold px-2 py-0.5 ${getAgeRatingBadgeColor(movie.AgeRating)} text-white rounded w-fit`;
+        document.getElementById('poster-img').src = movie.PosterUrl;
+
+        const resShowtimes = await fetch(`https://henchman-obscurity-blandness.ngrok-free.dev/api/showtimes/${movieId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        allShowtimes = await resShowtimes.json();
+
+        const currentCity = localStorage.getItem('apecine_city') || 'Đà Nẵng';
+        renderShowtimesByLocation(currentCity);
+
+      } catch (err) {
+        console.error('Lỗi tải dữ liệu đặt vé từ CSDL:', err);
+      }
+    }
+
+    function getAgeRatingBadgeColor(ageRating) {
+      if (ageRating === 'P') return 'bg-emerald-600';
+      if (ageRating === 'T13') return 'bg-[#ffb400] text-black';
+      if (ageRating === 'T18') return 'bg-purple-600';
+      return 'bg-[#e50914]';
+    }
+
+    async function selectShowtime(st, displayDate, btn) {
+      document.querySelectorAll('.time-btn').forEach(b => {
+        b.className = 'time-btn px-4 py-2.5 rounded-xl border border-white/10 text-xs font-bold transition-all text-center bg-[#1f2430] text-gray-300 hover:border-white';
+      });
+      btn.className = 'time-btn px-4 py-2.5 rounded-xl border border-[#e50914] bg-[#e50914]/20 text-xs font-bold transition-all text-center text-white';
+
+      currentBooking.showtimeId = st.ShowtimeId;
+      currentBooking.date = displayDate;
+      currentBooking.time = st.StartTime;
+      currentBooking.format = st.FormatType;
+      currentBooking.roomName = st.AuditoriumName;
+      currentBooking.cinemaName = st.CinemaName;
+      currentBooking.selectedSeats = []; 
+
+      document.getElementById('summary-time').innerText = `${st.StartTime} - ${st.FormatType}`;
+      document.getElementById('summary-date').innerText = displayDate;
+      document.getElementById('summary-room').innerText = st.AuditoriumName;
+      document.getElementById('selected-cinema').innerText = st.CinemaName;
+      document.getElementById('summary-seats').innerText = 'Chưa chọn';
+      document.getElementById('summary-total').innerText = '0 đ';
+
+      await fetchBookedSeats(st.ShowtimeId, st.TotalRows, st.SeatsPerRow);
+    }
+
+    // Tải danh sách ghế đã bán (Đã tích hợp ngrok-skip-browser-warning)
+    async function fetchBookedSeats(showtimeId, totalRows, seatsPerRow) {
+      try {
+        const res = await fetch(`https://henchman-obscurity-blandness.ngrok-free.dev/api/booked-seats/${showtimeId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        bookedSeatsList = await res.json();
+        renderSeatGrid(totalRows, seatsPerRow);
+      } catch (err) {
+        console.error('Lỗi tải ghế đã bán:', err);
+        bookedSeatsList = [];
+        renderSeatGrid(totalRows, seatsPerRow);
+      }
+    }
+
+    // Render sơ đồ ghế co giãn theo kích thước phòng trong CSDL
+    function renderSeatGrid(totalRows = 6, seatsPerRow = 10) {
+      const seatGrid = document.getElementById('seat-grid');
+      seatGrid.innerHTML = '';
+
+      const allRowLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+      const rowsToRender = allRowLetters.slice(0, totalRows);
+
+      rowsToRender.forEach((row, rowIndex) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'flex gap-2 items-center';
+        
+        const labelLeft = document.createElement('span');
+        labelLeft.className = 'w-6 text-center text-xs font-bold text-gray-500';
+        labelLeft.innerText = row;
+        rowDiv.appendChild(labelLeft);
+
+        const isCoupleRow = (rowIndex === rowsToRender.length - 1 && totalRows >= 4);
+
+        if (isCoupleRow) {
+          const coupleCount = Math.floor(seatsPerRow / 2);
+          for (let i = 1; i <= coupleCount; i++) {
+            const seatId = `${row}${i}`;
+            const isSold = bookedSeatsList.includes(seatId);
+            const seatBtn = document.createElement('button');
+            seatBtn.className = `w-[72px] h-8 rounded-lg text-[10px] font-bold border transition-all ${
+              isSold ? 'bg-gray-700/40 border-transparent text-gray-600 cursor-not-allowed' : 'bg-[#f397e1]/20 border-pink-400 text-[#f397e1] hover:bg-[#f397e1]/40'
+            }`;
+            seatBtn.innerText = `Cpl ${i}`;
+
+            if (!isSold) {
+              seatBtn.onclick = () => toggleSeat(seatId, seatBtn, 180000);
+            } else {
+              seatBtn.disabled = true;
+            }
+            rowDiv.appendChild(seatBtn);
+          }
+        } else {
+          for (let i = 1; i <= seatsPerRow; i++) {
+            const seatId = `${row}${i}`;
+            const isVIP = (rowIndex >= Math.floor(totalRows / 2) - 1 && rowIndex <= Math.floor(totalRows / 2));
+            const isSold = bookedSeatsList.includes(seatId);
+            const price = isVIP ? 115000 : 95000;
+
+            const seatBtn = document.createElement('button');
+            seatBtn.className = `w-8 h-8 rounded-lg text-[10px] font-bold border transition-all ${
+              isSold ? 'bg-gray-700/40 border-transparent text-gray-600 cursor-not-allowed' : 
+              isVIP ? 'bg-amber-500/10 border-amber-500/40 text-amber-400 hover:border-amber-400' : 
+              'bg-[#1e293b] border-blue-400/30 text-blue-200 hover:border-blue-400'
+            }`;
+            seatBtn.innerText = i;
+            
+            if (!isSold) {
+              seatBtn.onclick = () => toggleSeat(seatId, seatBtn, price);
+            } else {
+              seatBtn.disabled = true;
+            }
+            rowDiv.appendChild(seatBtn);
+          }
+        }
+
+        const labelRight = document.createElement('span');
+        labelRight.className = 'w-6 text-center text-xs font-bold text-gray-500';
+        labelRight.innerText = row;
+        rowDiv.appendChild(labelRight);
+
+        seatGrid.appendChild(rowDiv);
+      });
+    }
+
+    function toggleSeat(seatId, btn, price) {
+      startTimer();
+      const index = currentBooking.selectedSeats.findIndex(s => s.id === seatId);
+      const isCouple = btn.classList.contains('w-[72px]');
+      if (index > -1) {
+        // Bỏ chọn ghế
+        currentBooking.selectedSeats.splice(index, 1);
+        if (isCouple) {
+          btn.className = 'w-[72px] h-8 rounded-lg text-[10px] font-bold border transition-all bg-[#f397e1]/20 border-pink-400 text-[#f397e1] hover:bg-[#f397e1]/40';
+        } else {
+          // Trả về class gốc tùy theo VIP hay Thường
+          const isVIP = btn.getAttribute('data-is-vip') === 'true';
+          btn.className = isVIP 
+            ? 'w-8 h-8 rounded-lg text-[10px] font-bold border transition-all bg-amber-500/10 border-amber-500/40 text-amber-400 hover:border-amber-400'
+            : 'w-8 h-8 rounded-lg text-[10px] font-bold border transition-all bg-[#1e293b] border-blue-400/30 text-blue-200 hover:border-blue-400';
+        }
+      } else {
+        // Chọn ghế
+        currentBooking.selectedSeats.push({ id: seatId, price: price });
+        if (isCouple) {
+          btn.className = 'w-[72px] h-8 rounded-lg text-[10px] font-bold border transition-all bg-[#e50914] border-[#e50914] text-white shadow-md';
+        } else {
+          btn.className = 'w-8 h-8 rounded-lg text-[10px] font-bold border transition-all bg-[#e50914] border-[#e50914] text-white shadow-md';
+        }
+      }
+      updateSummary();
+    }
+
+    function updateSummary() {
+      if (currentBooking.selectedSeats.length > 0) {
+        document.getElementById('summary-seats').innerText = currentBooking.selectedSeats.map(s => s.id).join(', ');
+      } else {
+        document.getElementById('summary-seats').innerText = 'Chưa chọn';
+      }
+      const total = currentBooking.selectedSeats.reduce((sum, item) => sum + item.price, 0);
+      document.getElementById('summary-total').innerText = total.toLocaleString('vi-VN') + ' đ';
+    }
+
+    // Chuyển sang trang thanh toán payment.html
+    function checkout() {
+      if (currentBooking.selectedSeats.length === 0) {
+        alert('Vui lòng chọn ít nhất một ghế trước khi thanh toán!');
+        return;
+      }
+
+      const paymentPayload = {
+        showtimeId: currentBooking.showtimeId,
+        movieTitle: document.getElementById('selected-movie-title').innerText,
+        posterUrl: document.getElementById('poster-img').src,
+        cinemaName: currentBooking.cinemaName,
+        format: currentBooking.format,
+        time: currentBooking.time,
+        date: currentBooking.date,
+        roomName: currentBooking.roomName,
+        selectedSeats: currentBooking.selectedSeats
+      };
+
+      localStorage.setItem('apecine_current_booking', JSON.stringify(paymentPayload));
+      window.location.href = 'Payment.html';
+    }
+
+    // Đồng hồ đếm ngược giữ ghế 5 phút
+    let timeLeft = 300;
+    let timerStarted = false;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerStarted) return;
+      timerStarted = true;
+      timerInterval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        const countdownEl = document.getElementById('countdown');
+        if (countdownEl) {
+          countdownEl.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert('Hết thời gian giữ ghế!');
+          location.reload();
+        }
+        timeLeft--;
+      }, 1000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadBookingDataFromDB();
+    });
+  </script>
+</body>
+</html>

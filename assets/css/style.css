@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-cinema: #0a0d14;
+  --bg-card: #151922;
+  --bg-hover: #1f2430;
+  --color-primary: #e50914; /* Đỏ rạp chiếu phim CGV */
+  --color-gold: #ffb400;    /* Vàng VIP Galaxy */
+  --color-text: #ffffff;
+  --color-text-muted: #9ca3af;
+}
+
+body {
+  background-color: var(--bg-cinema);
+  color: var(--color-text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-cinema);
+}
+::-webkit-scrollbar-thumb {
+  background: #2b303c;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.glow-primary {
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+}

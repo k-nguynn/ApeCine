@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApeCine - Chi Tiết Phim</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body class="bg-[#0a0d14] text-white font-['Plus_Jakarta_Sans']">
+
+  <!-- HEADER NAVIGATION DÙNG CHUNG -->
+  <div id="common-header"></div>
+
+  <!-- MAIN MOVIE DETAIL CONTENT -->
+  <main class="pt-20">
+    
+    <!-- BANNER HERO CHÍNH CỦA PHIM -->
+    <section class="relative w-full min-h-[500px] lg:min-h-[580px] overflow-hidden bg-[#0a0d14] flex items-center">
+      <!-- Image Backdrop -->
+      <div id="movie-backdrop" class="absolute inset-0 bg-cover bg-center opacity-30 transition-all duration-500"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/80 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#0a0d14] via-[#0a0d14]/90 to-transparent"></div>
+
+      <!-- Content Grid -->
+      <div class="relative max-w-[1360px] mx-auto px-6 py-12 w-full z-10">
+        <div class="flex flex-col md:flex-row gap-8 lg:gap-12 items-center md:items-start">
+          
+          <!-- Poster Phim -->
+          <div class="w-64 md:w-72 lg:w-80 shrink-0 relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
+            <img id="movie-poster" src="" alt="Poster Phim" class="w-full h-auto object-cover">
+            <button onclick="openTrailerModal()" class="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-center justify-center transition-all">
+              <span class="w-16 h-16 rounded-full bg-[#e50914] text-white flex items-center justify-center shadow-2xl glow-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">play_arrow</span>
+              </span>
+            </button>
+          </div>
+
+          <!-- Thông tin chi tiết Phim -->
+          <div class="flex-1 space-y-5 text-center md:text-left">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+              <span id="movie-age" class="px-2.5 py-1 rounded bg-[#e50914] text-white font-extrabold text-xs">...</span>
+              <span id="movie-genre" class="px-2.5 py-1 rounded bg-[#1f2430] border border-white/10 text-gray-300 font-bold text-xs">...</span>
+              <span class="px-2.5 py-1 rounded bg-[#ffb400]/20 border border-[#ffb400] text-[#ffb400] font-bold text-xs">IMAX 3D</span>
+            </div>
+
+            <h1 id="movie-title" class="text-3xl lg:text-5xl font-extrabold tracking-tight leading-tight">Đang tải tên phim...</h1>
+
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-6 text-xs md:text-sm text-gray-300 font-medium">
+              <div class="flex items-center gap-1 text-[#ffb400]">
+                <span class="material-symbols-outlined text-base">star</span>
+                <strong id="movie-rating" class="text-white text-base font-extrabold">0.0</strong> /10
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-base text-gray-400">schedule</span>
+                <span id="movie-duration">0 phút</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-base text-gray-400">translate</span>
+                <span id="movie-language">Tiếng Việt</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs text-gray-300 border-t border-white/10">
+              <p><strong class="text-gray-400">Đạo diễn:</strong> <span id="movie-director">...</span></p>
+              <p><strong class="text-gray-400">Khởi chiếu:</strong> <span id="movie-release">...</span></p>
+              <p class="sm:col-span-2"><strong class="text-gray-400">Diễn viên:</strong> <span id="movie-cast">...</span></p>
+            </div>
+
+            <div class="pt-4 flex flex-wrap items-center justify-center md:justify-start gap-4">
+              <a id="btn-booking-now" href="#" class="px-8 py-4 rounded-xl bg-[#e50914] hover:bg-[#c10712] text-white font-extrabold text-sm transition-all glow-primary flex items-center gap-2">
+                <span class="material-symbols-outlined">confirmation_number</span> Đặt Vé Ngay
+              </a>
+              <button onclick="openTrailerModal()" class="px-6 py-4 rounded-xl bg-[#1f2430] hover:bg-[#2b303c] text-white font-bold text-sm border border-white/10 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined">play_circle</span> Xem Trailer
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- NỘI DUNG PHIM & LỊCH CHIẾU (MỞ RỘNG TOÀN BỘ KHUNG) -->
+    <section class="max-w-[1360px] mx-auto px-6 py-12">
+      <div class="space-y-10">
+        
+        <!-- Mô tả cốt truyện -->
+        <div class="bg-[#151922] p-6 lg:p-8 rounded-2xl border border-white/10 shadow-xl space-y-4">
+          <h2 class="text-xl font-extrabold flex items-center gap-2 border-l-4 border-[#e50914] pl-3">
+            Nội Dung Phim
+          </h2>
+          <p id="movie-description" class="text-gray-300 text-sm leading-relaxed whitespace-pre-line">
+            Đang tải nội dung phim từ cơ sở dữ liệu...
+          </p>
+        </div>
+
+        <!-- Lịch chiếu động đồng bộ từ Database & Khu vực -->
+        <div class="bg-[#151922] p-6 lg:p-8 rounded-2xl border border-white/10 shadow-xl space-y-6">
+          <h2 class="text-xl font-extrabold flex items-center gap-2 border-l-4 border-[#e50914] pl-3">
+            Lịch Chiếu Phim 
+          </h2>
+
+          <!-- Chọn Ngày Chiếu -->
+          <div>
+            <div id="showtime-dates-container" class="flex gap-3 overflow-x-auto pb-1">
+              <span class="text-xs text-gray-400">Đang tải ngày chiếu...</span>
+            </div>
+          </div>
+
+          <!-- Danh sách Rạp & Suất chiếu theo CSDL -->
+          <div id="showtimes-cinemas-container" class="space-y-4 pt-2">
+            <span class="text-xs text-gray-400">Vui lòng chọn ngày chiếu để xem suất...</span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL XEM TRAILER YOUTUBE -->
+  <div id="trailer-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-4xl bg-[#151922] rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 id="trailer-title" class="font-bold text-sm text-white">Trailer Phim</h3>
+        <button onclick="closeTrailerModal()" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white">
+          <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+      </div>
+      <div class="relative aspect-video w-full">
+        <iframe id="trailer-iframe" class="w-full h-full" src="" title="YouTube trailer player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER DÙNG CHUNG -->
+  <div id="common-footer"></div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script src="assets/js/components.js"></script>
+  <script>
+    let currentTrailerUrl = '';
+    let allMovieShowtimes = [];
+    let selectedMovieId = 'dune2';
+    let selectedDateStr = '';
+
+    // --- HÀM TẢI THÔNG TIN CHI TIẾT PHIM VÀ LỊCH CHIẾU TỪ DATABASE ---
+    async function loadMovieDetailFromDB() {
+      const urlParams = new URLSearchParams(window.location.search);
+      selectedMovieId = urlParams.get('id') || 'dune2';
+
+      try {
+        // 1. Tải thông tin phim (Đã tích hợp ngrok-skip-browser-warning)[cite: 16]
+        const resMovie = await fetch(`https://henchman-obscurity-blandness.ngrok-free.dev/api/movies/${selectedMovieId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        if (!resMovie.ok) throw new Error('Không tìm thấy phim');
+        const movie = await resMovie.json();
+
+        document.getElementById('movie-title').innerText = movie.Title;
+        document.getElementById('movie-age').innerText = movie.AgeRating;
+        document.getElementById('movie-age').className = `px-2.5 py-1 rounded ${getAgeRatingBadgeColor(movie.AgeRating)} text-white font-extrabold text-xs`;
+        document.getElementById('movie-genre').innerText = movie.Genre;
+        document.getElementById('movie-rating').innerText = movie.Rating;
+        document.getElementById('movie-duration').innerText = `${movie.Duration} phút`;
+        document.getElementById('movie-language').innerText = movie.Language;
+        document.getElementById('movie-director').innerText = movie.Director || 'Đang cập nhật';
+        document.getElementById('movie-release').innerText = movie.ReleaseDate ? new Date(movie.ReleaseDate).toLocaleDateString('vi-VN') : 'Đang chiếu';
+        document.getElementById('movie-cast').innerText = movie.Cast || 'Đang cập nhật';
+        document.getElementById('movie-description').innerText = movie.Description || 'Chưa có thông tin mô tả cho bộ phim này.';
+        document.getElementById('movie-poster').src = movie.PosterUrl;
+        document.getElementById('movie-backdrop').style.backgroundImage = `url('${movie.PosterUrl}')`;
+        
+        currentTrailerUrl = movie.TrailerUrl || '';
+        document.getElementById('btn-booking-now').href = `Booking.html?id=${movie.MovieId}`;
+
+        // 2. Tải danh sách suất chiếu từ CSDL (Đã tích hợp ngrok-skip-browser-warning)[cite: 16]
+        const resShowtimes = await fetch(`https://henchman-obscurity-blandness.ngrok-free.dev/api/showtimes/${selectedMovieId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        allMovieShowtimes = await resShowtimes.json();
+
+        // Render lịch chiếu theo khu vực hiện tại trên Navbar
+        const currentCity = localStorage.getItem('apecine_city') || 'Đà Nẵng';
+        renderShowtimesForCity(currentCity);
+
+      } catch (err) {
+        console.error('Lỗi khi tải chi tiết phim từ CSDL:', err);
+        document.getElementById('movie-title').innerText = 'Không tìm thấy bộ phim';
+        document.getElementById('movie-description').innerText = 'Có lỗi xảy ra hoặc bộ phim không tồn tại trong hệ thống CSDL.';
+      }
+    }
+
+    // Lọc suất chiếu theo thành phố/khu vực
+    function renderShowtimesForCity(cityName) {
+      const filteredByCity = allMovieShowtimes.filter(st => st.City ? st.City.includes(cityName) : true);
+      const dateContainer = document.getElementById('showtime-dates-container');
+      
+      if (filteredByCity.length === 0) {
+        dateContainer.innerHTML = `<span class="text-xs text-red-400">Không có suất chiếu tại khu vực ${cityName}.</span>`;
+        document.getElementById('showtimes-cinemas-container').innerHTML = '';
+        return;
+      }
+
+      // Lấy danh sách ngày duy nhất
+      const uniqueDates = [...new Set(filteredByCity.map(st => st.ShowDate.split('T')[0]))].sort();
+      
+      dateContainer.innerHTML = uniqueDates.map((dateStr, idx) => {
+        const parts = dateStr.split('-');
+        const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        const isFirst = (idx === 0);
+        if (isFirst && !selectedDateStr) selectedDateStr = dateStr;
+
+        return `
+          <button onclick="selectShowtimeDate('${dateStr}', this)" class="date-tab-btn px-5 py-2.5 rounded-xl font-bold text-xs shrink-0 transition-all ${
+            dateStr === selectedDateStr ? 'bg-[#e50914] text-white shadow-lg' : 'bg-[#1f2430] hover:bg-[#2b303c] text-gray-300'
+          }">
+            ${displayDate}
+          </button>
+        `;
+      }).join('');
+
+      renderCinemasAndTimes(selectedDateStr, cityName);
+    }
+
+    // Khi người dùng bấm chọn ngày chiếu
+    function selectShowtimeDate(dateStr, btnElement) {
+      selectedDateStr = dateStr;
+      document.querySelectorAll('.date-tab-btn').forEach(b => {
+        b.className = "date-tab-btn px-5 py-2.5 rounded-xl font-bold text-xs shrink-0 transition-all bg-[#1f2430] hover:bg-[#2b303c] text-gray-300";
+      });
+      btnElement.className = "date-tab-btn px-5 py-2.5 rounded-xl font-bold text-xs shrink-0 transition-all bg-[#e50914] text-white shadow-lg";
+
+      const currentCity = localStorage.getItem('apecine_city') || 'Đà Nẵng';
+      renderCinemasAndTimes(dateStr, currentCity);
+    }
+
+    // Render danh sách Rạp và Giờ chiếu theo ngày và khu vực
+    function renderCinemasAndTimes(dateStr, cityName) {
+      const container = document.getElementById('showtimes-cinemas-container');
+      
+      const matchedShowtimes = allMovieShowtimes.filter(st => {
+        const matchCity = st.City ? st.City.includes(cityName) : true;
+        const matchDate = st.ShowDate.split('T')[0] === dateStr;
+        return matchCity && matchDate;
+      });
+
+      if (matchedShowtimes.length === 0) {
+        container.innerHTML = `<span class="text-xs text-gray-400">Không có suất chiếu nào vào ngày này tại ${cityName}.</span>`;
+        return;
+      }
+
+      // Nhóm theo Cụm rạp (CinemaName)
+      const cinemasMap = {};
+      matchedShowtimes.forEach(st => {
+        if (!cinemasMap[st.CinemaName]) cinemasMap[st.CinemaName] = [];
+        cinemasMap[st.CinemaName].push(st);
+      });
+
+      container.innerHTML = Object.keys(cinemasMap).map(cinemaName => {
+        const times = cinemasMap[cinemaName];
+        return `
+          <div class="p-4 rounded-xl bg-[#1f2430]/60 border border-white/5 space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-sm text-white">${cinemaName}</h3>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              ${times.map(st => `
+                <a href="Booking.html?id=${selectedMovieId}&showtime=${st.ShowtimeId}" class="px-4 py-2 rounded-xl bg-[#151922] hover:bg-[#e50914] border border-white/10 hover:border-[#e50914] text-xs font-bold transition-all text-center block">
+                  ${st.StartTime} <span class="text-[10px] block text-gray-400 hover:text-white">${st.FormatType}</span>
+                </a>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Hàm gọi khi thay đổi khu vực từ Navbar dùng chung
+    function selectLocation(name) {
+      localStorage.setItem('apecine_city', name);
+      const locText = document.getElementById('current-location-text');
+      if (locText) locText.innerText = name;
+      if (typeof toggleLocationMenu === 'function') toggleLocationMenu();
+      renderShowtimesForCity(name);
+    }
+
+    function getAgeRatingBadgeColor(ageRating) {
+      if (ageRating === 'P') return 'bg-emerald-600';
+      if (ageRating === 'T13') return 'bg-[#ffb400] text-black';
+      if (ageRating === 'T18') return 'bg-purple-600';
+      return 'bg-[#e50914]';
+    }
+
+    // --- TRAILER MODAL ---
+    function openTrailerModal() {
+      const title = document.getElementById('movie-title').innerText;
+      document.getElementById('trailer-title').innerText = `Trailer - ${title}`;
+      document.getElementById('trailer-iframe').src = currentTrailerUrl || 'https://www.youtube.com/embed/Way9Dexny3w?autoplay=1';
+      document.getElementById('trailer-modal').classList.remove('hidden');
+    }
+
+    function closeTrailerModal() {
+      document.getElementById('trailer-modal').classList.add('hidden');
+      document.getElementById('trailer-iframe').src = '';
+    }
+
+    // KHỞI CHẠY TRANG
+    window.addEventListener('DOMContentLoaded', () => {
+      loadMovieDetailFromDB();
+    });
+  </script>
+</body>
+</html>
